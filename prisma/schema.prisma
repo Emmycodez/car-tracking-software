@@ -1,0 +1,32 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// prisma/schema.prisma
+
+model User {
+  id                      Int      @id @default(autoincrement())
+  email                   String   @unique
+  name                    String?
+  role                    String   @default("user")
+  password                String?
+  traccarId               String?
+  accountActivationToken  String?  @unique
+  activationTokenExpiry   DateTime?
+
+  fleets                  Fleet[]
+}
+
+model Fleet {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  deviceId  String   // Traccar device ID
+  name      String   // Fleet name
+  user      User     @relation(fields: [userId], references: [id])
+}

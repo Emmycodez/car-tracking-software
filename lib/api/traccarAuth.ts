@@ -1,7 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers";
-import { User } from "@prisma/client";
+import type{ User  } from "@prisma/client";
 
 
 const traccarApiUrl = process.env.TRACCAR_API_URL

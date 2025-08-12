@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
+    "@prisma/client": "^6.13.0",
+    "@prisma/extension-accelerate": "^2.0.2",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -48,7 +51,7 @@
     "input-otp": "^1.4.2",
     "leaflet": "^1.9.4",
     "lucide": "^0.536.0",
-    "lucide-react": "^0.536.0",
+    "lucide-react": "^0.539.0",
     "next": "15.4.5",
     "next-themes": "^0.4.6",
     "react": "19.1.1",
@@ -67,12 +70,11 @@
     "zod": "^4.0.15"
   },
   "devDependencies": {
-    "@prisma/client": "^6.13.0",
-    "@types/mapbox-gl": "^3.4.1",
     "@tailwindcss/postcss": "^4",
     "@tanstack/react-query": "^5.84.1",
     "@types/bcrypt": "^6.0.0",
     "@types/leaflet": "^1.9.20",
+    "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

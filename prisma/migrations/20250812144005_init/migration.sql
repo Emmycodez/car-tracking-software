@@ -3,10 +3,11 @@ CREATE TABLE "public"."User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'user',
-    "phone" INTEGER NOT NULL,
+    "password" TEXT,
+    "traccarId" TEXT,
+    "accountActivationToken" TEXT,
+    "activationTokenExpiry" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -23,6 +24,9 @@ CREATE TABLE "public"."Fleet" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_accountActivationToken_key" ON "public"."User"("accountActivationToken");
 
 -- AddForeignKey
 ALTER TABLE "public"."Fleet" ADD CONSTRAINT "Fleet_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

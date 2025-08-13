@@ -1,4 +1,5 @@
 import type React from "react"
+import ConnectedToServer from "@/components/frontend/ConnectedToServer"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/clients/dashboard-sidebar"
 import { Search, Filter } from "lucide-react"
@@ -23,12 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Filter className="h-4 w-4" />
               </Button>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Live</span>
-              </div>
-            </div>
+            <ConnectedToServer />
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
         </Suspense>

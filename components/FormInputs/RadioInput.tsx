@@ -1,5 +1,3 @@
-import React from "react";
-
 type RadioOption = {
   label: string;
   id: string;

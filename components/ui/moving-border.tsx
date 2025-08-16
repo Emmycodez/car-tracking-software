@@ -6,7 +6,7 @@ import {
   useMotionTemplate,
   useMotionValue,
   useTransform,
-} from "framer-motion";
+} from "motion";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 

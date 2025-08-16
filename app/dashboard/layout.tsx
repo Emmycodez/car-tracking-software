@@ -9,14 +9,13 @@ import { Suspense } from "react"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <SidebarInset>
-        <Suspense fallback={<div>Loading...</div>}>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+      <SidebarInset className="relative">
+         <header className="flex h-16 fixed w-full bg-transparent shrink-0 items-center gap-2 px-4 z-50">
             <SidebarTrigger className="-ml-1" />
             <div className="flex flex-1 items-center gap-2">
-              <div className="relative flex-1 max-w-md">
+              <div className="relative flex-1 max-w-md bg-white">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input placeholder="Search vehicles..." className="pl-8" />
               </div>
@@ -26,7 +25,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
             <ConnectedToServer />
           </header>
-          <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
+        <Suspense fallback={<div>Loading...</div>}>
+          {children}
         </Suspense>
       </SidebarInset>
     </SidebarProvider>

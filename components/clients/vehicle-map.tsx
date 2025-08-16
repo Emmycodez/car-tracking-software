@@ -3,15 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { MapPin } from "lucide-react"
 import "leaflet/dist/leaflet.css"
-
-interface Vehicle {
-  id: string
-  name: string
-  status: string
-  coordinates: { lat: number; lng: number }
-  speed: number
-  fuel: number
-}
+import type { Vehicle } from "@/types/types"
 
 interface VehicleMapProps {
   vehicles: Vehicle[]
@@ -65,7 +57,7 @@ const createCustomIcon = (L: typeof import("leaflet"), status: string, isSelecte
   })
 }
 
-export default function VehicleMap({ vehicles, onVehicleClick, selectedVehicle, mapCentered }: VehicleMapProps) {
+export default function VehicleMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<any | null>(null)
   const markersRef = useRef<{ [key: string]: any }>({})
@@ -136,51 +128,51 @@ export default function VehicleMap({ vehicles, onVehicleClick, selectedVehicle, 
     }
   }, [])
 
-  useEffect(() => {
-    if (!leafletInstance || !mapRef.current) return
+  // useEffect(() => {
+  //   if (!leafletInstance || !mapRef.current) return
 
-    Object.values(markersRef.current).forEach((marker) => {
-      mapRef.current?.removeLayer(marker)
-    })
-    markersRef.current = {}
+  //   Object.values(markersRef.current).forEach((marker) => {
+  //     mapRef.current?.removeLayer(marker)
+  //   })
+  //   markersRef.current = {}
 
-    vehicles.forEach((vehicle) => {
-      const isSelected = vehicle.id === selectedVehicle
-      const marker = leafletInstance.marker([vehicle.coordinates.lat, vehicle.coordinates.lng], {
-        icon: createCustomIcon(leafletInstance, vehicle.status, isSelected),
-      })
+  //   vehicles.forEach((vehicle) => {
+  //     const isSelected = vehicle.id === selectedVehicle
+  //     const marker = leafletInstance.marker([vehicle.coordinates.lat, vehicle.coordinates.lng], {
+  //       icon: createCustomIcon(leafletInstance, vehicle.status, isSelected),
+  //     })
 
-      marker.bindPopup(`
-        <div style="font-family: system-ui; min-width: 200px;">
-          <h3 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600;">${vehicle.name}</h3>
-          <div style="font-size: 12px; color: #666; line-height: 1.4;">
-            <div><strong>Status:</strong> ${vehicle.status}</div>
-            <div><strong>Speed:</strong> ${vehicle.speed} km/h</div>
-            <div><strong>Fuel:</strong> ${vehicle.fuel}%</div>
-          </div>
-        </div>
-      `)
+  //     marker.bindPopup(`
+  //       <div style="font-family: system-ui; min-width: 200px;">
+  //         <h3 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600;">${vehicle.name}</h3>
+  //         <div style="font-size: 12px; color: #666; line-height: 1.4;">
+  //           <div><strong>Status:</strong> ${vehicle.status}</div>
+  //           <div><strong>Speed:</strong> ${vehicle.speed} km/h</div>
+  //           <div><strong>Fuel:</strong> ${vehicle.fuel}%</div>
+  //         </div>
+  //       </div>
+  //     `)
 
-      marker.on("click", () => {
-        onVehicleClick(vehicle.id)
-      })
+  //     marker.on("click", () => {
+  //       onVehicleClick(vehicle.id)
+  //     })
 
-      marker.addTo(mapRef.current!)
-      markersRef.current[vehicle.id] = marker
-    })
-  }, [vehicles, selectedVehicle, onVehicleClick, leafletInstance])
+  //     marker.addTo(mapRef.current!)
+  //     markersRef.current[vehicle.id] = marker
+  //   })
+  // }, [vehicles, selectedVehicle, onVehicleClick, leafletInstance])
 
-  useEffect(() => {
-    if (mapCentered && selectedVehicle && mapRef.current && leafletInstance) {
-      const vehicle = vehicles.find((v) => v.id === selectedVehicle)
-      if (vehicle) {
-        mapRef.current.setView([vehicle.coordinates.lat, vehicle.coordinates.lng], 15, {
-          animate: true,
-          duration: 1,
-        })
-      }
-    }
-  }, [mapCentered, selectedVehicle, vehicles, leafletInstance])
+  // useEffect(() => {
+  //   if (mapCentered && selectedVehicle && mapRef.current && leafletInstance) {
+  //     const vehicle = vehicles.find((v) => v.id === selectedVehicle)
+  //     if (vehicle) {
+  //       mapRef.current.setView([vehicle.coordinates.lat, vehicle.coordinates.lng], 15, {
+  //         animate: true,
+  //         duration: 1,
+  //       })
+  //     }
+  //   }
+  // }, [mapCentered, selectedVehicle, vehicles, leafletInstance])
 
   if (!leafletInstance) {
     return (

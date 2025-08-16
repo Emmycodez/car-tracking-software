@@ -44,8 +44,6 @@
 //   );
 // }
 
-import React from 'react'
-
 const FormSelectInput = () => {
   return (
     <div>FormSelectInput</div>

@@ -9,12 +9,12 @@ interface Props {
     ref: HTMLDivElement | null
 }
 
-export default function DrawerSheets({ref}: Props) {
+export default function DrawerSheets() {
   return (
-    <Drawer.Root open={true} container={ref}>
+    <Drawer.Root open={true}>
       {/* <Drawer.Trigger>Open Drawer</Drawer.Trigger> */}
-      {ref && <Drawer.Portal container={ref}>
-        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none">
+      <Drawer.Portal >
+        <Drawer.Content className="bg-gray-100 rounded-xl flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none">
           <div className="p-4 bg-white rounded-t-[10px] flex-1">
             <div aria-hidden className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8" />
             <div className="max-w-md mx-auto">
@@ -83,7 +83,7 @@ export default function DrawerSheets({ref}: Props) {
             </div>
           </div>
         </Drawer.Content>
-      </Drawer.Portal>}
+      </Drawer.Portal>
     </Drawer.Root>
   );
 }

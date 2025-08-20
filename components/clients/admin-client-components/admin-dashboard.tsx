@@ -3,10 +3,10 @@ import { Users, HardDrive, Activity, Clock, Car, UserPlus } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const mockStats = {
-  totalUsers: 120,
-  totalDevices: 85,
-  activeDevices: 60,
-  offlineDevices: 25,
+  totalUsers: 150,
+  totalDevices: 98,
+  activeDevices: 70,
+  offlineDevices: 30,
 }
 
 const mockRecentActivity = [

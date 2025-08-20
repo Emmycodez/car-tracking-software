@@ -1,123 +1,148 @@
-"use client"
+"use client";
 
-import type React from "react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import type React from "react";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Edit, HardDrive, Trash2, UserPlus } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
+import { createClientAccount, deleteUser } from "@/actions/admin-actions";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { UserTableProps } from "@/types/types";
+import {
+  Edit,
+  HardDrive,
+  Loader2,
+  MoreHorizontal,
+  Trash2,
+  UserPlus,
+} from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { NoUsers } from "./no-users";
 
-const mockUsers = [
-  {
-    id: "usr_1",
-    name: "John Smith",
-    email: "john.smith@example.com",
-    role: "user",
-    traccarId: "1001",
-    businessName: "Acme Corp",
-  },
-  {
-    id: "usr_2",
-    name: "Sarah Johnson",
-    email: "sarah.j@example.com",
-    role: "admin",
-    traccarId: "1002",
-    businessName: "Global Logistics",
-  },
-  {
-    id: "usr_3",
-    name: "Mike Wilson",
-    email: "mike.w@example.com",
-    role: "user",
-    traccarId: "1003",
-    businessName: "City Deliveries",
-  },
-  {
-    id: "usr_4",
-    name: "Emma Davis",
-    email: "emma.d@example.com",
-    role: "user",
-    traccarId: "1004",
-    businessName: "Express Freight",
-  },
-  {
-    id: "usr_5",
-    name: "David Lee",
-    email: "david.l@example.com",
-    role: "user",
-    traccarId: "1005",
-    businessName: "Local Movers",
-  },
-]
-
-export function UserManagement() {
-  const [users, setUsers] = useState(mockUsers)
-  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false)
-  const [newUserName, setNewUserName] = useState("")
-  const [newUserEmail, setNewUserEmail] = useState("")
-  const [newUserBusinessName, setNewUserBusinessName] = useState("")
+export function UserManagement({ dbUsers }: UserTableProps) {
+  const [users, setUsers] = useState(dbUsers);
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserEmail, setNewUserEmail] = useState("");
+  const [newUserBusinessName, setNewUserBusinessName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEditUser = (userId: string) => {
-    console.log(`Editing user: ${userId}`)
+    console.log(`Editing user: ${userId}`);
     // In a real app, you'd open a modal or navigate to an edit page
-    alert(`Simulating edit for user: ${userId}`)
-  }
+    alert(`Simulating edit for user: ${userId}`);
+  };
 
-  const handleDeleteUser = (userId: string) => {
-    if (confirm(`Are you sure you want to delete user ${userId}?`)) {
-      setUsers(users.filter((user) => user.id !== userId))
-      console.log(`Deleting user: ${userId}`)
-      // In a real app, you'd call a server action to delete the user
-    }
-  }
+  const handleDeleteUser = async (userId: string) => {
+    toast.promise(deleteUser(Number(userId)), {
+      loading: "Deleting user...",
+      success: () => {
+        setUsers((prev) => prev.filter((user) => user.id !== userId));
+        return "User deleted successfully!";
+      },
+      error: (err) => {
+        console.error("Error deleting user:", err);
+        return `<b>Error:</b> ${err.message || "Failed to delete user"}`;
+      },
+    });
+  };
 
-  const handleCreateUser = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
     if (!newUserName || !newUserEmail) {
-      alert("Full Name and Email Address are required.")
-      return
+      toast.error("Full Name and Email Address are required.");
+      return;
     }
 
-    const newUser = {
-      id: `usr_${Date.now()}`, // Simple unique ID for mock
+    const response = await createClientAccount({
       name: newUserName,
       email: newUserEmail,
-      role: "user", // Default role for new users
-      traccarId: `TRC${Math.floor(Math.random() * 10000)}`, // Mock Traccar ID
       businessName: newUserBusinessName,
+    });
+
+    if (response.error) {
+      toast.error(`Error: ${response.error}`);
+      setIsLoading;
+      return;
     }
 
-    setUsers([...users, newUser])
-    setNewUserName("")
-    setNewUserEmail("")
-    setNewUserBusinessName("")
-    setIsAddUserModalOpen(false)
-    alert(`User '${newUser.name}' created successfully!`)
-    console.log("New user created:", newUser)
-    // In a real app, you'd trigger a server action here
-  }
+    if (response.id) {
+      setUsers((prev) => [
+        ...prev,
+        {
+          id: String(response.id), // Assuming your API returns the new user ID
+          name: newUserName,
+          email: newUserEmail,
+          businessName: newUserBusinessName,
+          role: "user", // Or whatever your API returns
+          traccarId: response.traccarId || "",
+        },
+      ]);
+    }
+    // Update local state to add the new user
+
+    toast.success("User account created successfully!");
+
+    // Optionally, close modal and reset form
+    setIsLoading(false);
+    setIsAddUserModalOpen(false);
+    setNewUserName("");
+    setNewUserEmail("");
+    setNewUserBusinessName("");
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">User Management</h1>
-          <p className="text-muted-foreground">Oversee all registered users in your system.</p>
+          <p className="text-muted-foreground">
+            Oversee all registered users in your system.
+          </p>
         </div>
         <Dialog open={isAddUserModalOpen} onOpenChange={setIsAddUserModalOpen}>
           <DialogTrigger asChild>
@@ -129,7 +154,9 @@ export function UserManagement() {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Add New User</DialogTitle>
-              <DialogDescription>Fill in the details to create a new user account.</DialogDescription>
+              <DialogDescription>
+                Fill in the details to create a new user account.
+              </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleCreateUser} className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
@@ -169,7 +196,13 @@ export function UserManagement() {
                 />
               </div>
               <DialogFooter>
-                <Button type="submit">Create User</Button>
+                <Button type="submit" className="cursor-pointer">
+                  {isLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Create User"
+                  )}
+                </Button>
               </DialogFooter>
             </form>
           </DialogContent>
@@ -179,7 +212,9 @@ export function UserManagement() {
       <Card>
         <CardHeader>
           <CardTitle>User List</CardTitle>
-          <CardDescription>All registered users and their details.</CardDescription>
+          <CardDescription>
+            All registered users and their details.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -189,19 +224,38 @@ export function UserManagement() {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Business Name</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Traccar ID</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
+                { users.length > 0 ?(users.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.businessName || "N/A"}</TableCell>
+                    <TableCell className="font-medium">
+                      <Badge
+                        variant={user.isActive ? "default" : "destructive"}
+                        className={`${
+                          user.isActive
+                            ? "bg-green-50 text-green-700 hover:bg-green-100"
+                            : "bg-red-50 text-red-700 hover:bg-red-100"
+                        }`}
+                      >
+                        {user.isActive ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
                     <TableCell>
-                      <Badge variant={user.role === "admin" ? "default" : "secondary"}>{user.role}</Badge>
+                      <Badge
+                        variant={
+                          user.role === "admin" ? "default" : "secondary"
+                        }
+                      >
+                        {user.role}
+                      </Badge>
                     </TableCell>
                     <TableCell>{user.traccarId}</TableCell>
                     <TableCell className="text-right">
@@ -212,7 +266,9 @@ export function UserManagement() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleEditUser(user.id)}>
+                          <DropdownMenuItem
+                            onClick={() => handleEditUser(user.id ?? "")}
+                          >
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                           </DropdownMenuItem>
@@ -222,20 +278,55 @@ export function UserManagement() {
                               Manage Devices
                             </Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleDeleteUser(user.id)} className="text-red-600">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <DropdownMenuItem
+                                className="text-red-600"
+                                onSelect={(e) => e.preventDefault()}
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you sure you want to delete this user:{" "}
+                                  <span className="font-semibold text-primary">
+                                    {user.name}
+                                  </span>
+                                  ?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. The user and all
+                                  related data will be permanently removed.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() =>
+                                    handleDeleteUser(user.id ?? "")
+                                  }
+                                  className="bg-red-600 hover:bg-red-700"
+                                >
+                                  Yes, delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                ))}
+                ))): (
+                  <NoUsers/>
+                )}
               </TableBody>
             </Table>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

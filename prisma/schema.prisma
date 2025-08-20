@@ -19,6 +19,12 @@ model User {
   traccarId               String?
   accountActivationToken  String?  @unique
   activationTokenExpiry   DateTime?
+  businessName            String?
+  createdAt               DateTime @default(now())
+  updatedAt              DateTime? @updatedAt
+  isActive                Boolean  @default(true)
+  devices                 Device[]
+
 
   fleets                  Fleet[]
 }
@@ -29,4 +35,17 @@ model Fleet {
   deviceId  String   // Traccar device ID
   name      String   // Fleet name
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model Device {
+  id        Int      @id @default(autoincrement())
+  traccarId String   @unique // The ID of the device in Traccar
+  name      String   // User-friendly name of the device
+  uniqueId  String   @unique // IMEI or other unique identifier for the device
+  attributes Json?
+  userId    Int?     // Foreign key to link to a User
+  user      User?    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

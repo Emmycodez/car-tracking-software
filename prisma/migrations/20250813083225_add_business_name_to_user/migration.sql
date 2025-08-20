@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "public"."User" ADD COLUMN     "businessName" TEXT,
+ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "isActive" BOOLEAN NOT NULL DEFAULT true,
+ADD COLUMN     "updatedAt" TIMESTAMP(3);

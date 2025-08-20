@@ -16,7 +16,6 @@ import TextInput from "../FormInputs/TextInput";
 import CustomCarousel from "../frontend/custom-carousel";
 import { Button } from "../ui/button";
 
-
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const {
@@ -95,7 +94,7 @@ export default function LoginForm() {
                   title="Sign In"
                   loadingTitle="Loading Please wait.."
                   loading={loading}
-                  className="w-full"
+                  className="w-full bg-primary cursor-pointer"
                   loaderIcon={Loader2}
                   showIcon={false}
                 />
@@ -128,11 +127,12 @@ export default function LoginForm() {
             <p className="mt-6 text-center text-sm text-gray-500">
               Not a Registered ?{" "}
               <Link
-                href="/register"
-                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                href="/sales"
+                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 underline"
               >
-                Create Account
+                Contact sales to{" "}
               </Link>
+              create an Account
             </p>
           </div>
         </div>

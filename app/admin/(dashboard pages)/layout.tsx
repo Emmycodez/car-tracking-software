@@ -1,13 +1,31 @@
-import type React from "react"
-import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { AdminSidebar } from "@/components/clients/admin-client-components/admin-sidebar" 
-import { Separator } from "@/components/ui/separator"
-import { Search, Filter } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Suspense } from "react"
+import type React from "react";
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { AdminSidebar } from "@/components/clients/admin-client-components/admin-sidebar";
+import { Separator } from "@/components/ui/separator";
+import { Search, Filter } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
+import { auth } from "@/config/auth";
+import { redirect } from "next/navigation";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/admin/login");
+  }
+  if (session.user.role !== "admin") {
+    redirect("/login");
+  }
+
   return (
     <SidebarProvider>
       <AdminSidebar />
@@ -30,5 +48,5 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </Suspense>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 // utils/db.ts
 import { db } from '@/prisma/db';
-import { verifyPassword } from './auth'; // Make sure this is implemented correctly
+import { verifyPassword } from './password'; // Make sure this is implemented correctly
 
 
 

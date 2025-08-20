@@ -5,19 +5,22 @@ import Image from "next/image";
 
 const carouselItems = [
   {
-    image: "/images/slide-1.jpg",
-    title: "Manage Your whole business",
-    subtitle: "Work with all of your businessses data from a single dashboard",
+    image: "/images/fleet-images.jpg",
+    title: "Real-Time Fleet Visibility",
+    subtitle:
+      "Track your vehicles’ location, speed, and routes instantly from a single dashboard on any device",
   },
   {
-    image: "/images/slide-2.jpg",
-    title: "Powerful Tools,",
-    subtitle: "All in One suite of applications your business needs",
+    image: "/images/analytics-image.webp",
+    title: "Smart Fleet Insights",
+    subtitle:
+      "Optimize routes and reduce costs with real-time data on driving behavior and vehicle status",
   },
   {
-    image: "/images/slide-3.jpg",
-    title: "Streamlined Workflows,",
-    subtitle: "Focus on What Matters in your business with data",
+    image: "/images/alerts-image.jpg",
+    title: "Instant Alerts & Control",
+    subtitle:
+      "Stay ahead with immediate notifications for speeding, maintenance, or route deviations",
   },
 ];
 

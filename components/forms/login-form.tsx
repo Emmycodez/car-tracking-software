@@ -51,8 +51,8 @@ export default function LoginForm() {
         reset();
         setLoading(false);
         toast.success("Login Successful");
-        setPassErr("");
         router.push(returnUrl);
+        setPassErr("");
       }
     } catch (error) {
       setLoading(false);
@@ -81,6 +81,7 @@ export default function LoginForm() {
                 placeholder="email"
               />
               <PasswordInput
+              type="password"
                 register={register}
                 errors={errors}
                 label="Password"

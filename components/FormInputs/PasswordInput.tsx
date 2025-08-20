@@ -25,7 +25,7 @@ export default function PasswordInput({
   register,
   errors,
   label,
-  type = "text",
+  type = "password",
   name,
   toolTipText,
   icon,

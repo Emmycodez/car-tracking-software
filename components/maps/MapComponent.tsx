@@ -13,7 +13,7 @@ export default function MapComponent({ vehicles }: { vehicles: Vehicle[] }) {
     latitude: 6.6018,
     zoom: 12,
   });
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
   const [showPopup, setShowPopup] = useState(false);
   return (
     <Map
@@ -21,7 +21,7 @@ export default function MapComponent({ vehicles }: { vehicles: Vehicle[] }) {
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN!}
       {...viewState}
       onMove={(evt) => setViewState(evt.viewState)}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%", height: "100%", position: "relative" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
     >
       {vehicles.map(({ id, coordinates: { lat, lng } }) => (
@@ -41,7 +41,7 @@ export default function MapComponent({ vehicles }: { vehicles: Vehicle[] }) {
             You are here
           </Popup>
         ))}
-      {isMobile ? <DrawerSheets  />:<DeviceMenu devices={vehicles} />}
+      {isMobile ? <DrawerSheets /> : <DeviceMenu devices={vehicles} />}
     </Map>
   );
 }

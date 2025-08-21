@@ -170,22 +170,12 @@ export default function DashboardPageClient() {
     // Simulate centering animation
     setTimeout(() => setMapCentered(false), 2000);
   };
-
-  useEffect(() => {
-    if (drawerRef.current) {
-      setMyRef(drawerRef.current);
-    }
-  }, []);
-
   return (
     <div
       ref={drawerRef}
       className="flex flex-1 max-h-[100svh] relative w-screen flex-col gap-4"
     >
       <Map vehicles={vehicles} />
-
-      {/* <DrawerSheets ref={myRef} /> */}
-      {/* Details Panel - The Deep Dive */}
     </div>
   );
 }
